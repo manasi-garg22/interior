@@ -281,14 +281,14 @@ function addTermsAndConditions(doc) {
   subHeading("Kitchen");
   bullets([
     "Waterproof Plywood (710 Grade) - Rs. 80-85 Range",
-    "Tandem Basket - Eigos / Godrej",
+    "Tandem Basket - Eigos / Godrej (if required)",
   ]);
   subHeading("Other Furniture");
   bullets([
     "MR Plywood 303 - Rs. 60-65 Range",
     "Inner Liner (Off White) - Rs. 450 Range",
     "Laminate - Rs. 1800 Range",
-    "Acrylic Finish (Kitchen Only) - Rs. 3500 Range",
+    "Acrylic Finish (if required) - Rs. 3800 Range",
     "Cupboard Configuration: 1 Cupboard + 4 Drawers",
     "Additional Drawer - Rs. 2000 per Drawer",
     "Handles - Rs. 200-250 Range",
@@ -296,6 +296,10 @@ function addTermsAndConditions(doc) {
     "Sofa Material - Refresh Prime",
     "Soft Close Hinges - Rs. 90 per Set",
     "Door Lock (Jali Door) - Rs. 1500 Range",
+  ]);
+  subHeading("Colour");
+  bullets([
+    "Interior only (in above specified work area) - Asian Royale / Berger Paints",
   ]);
   subHeading("Electrical Accessories");
   bullets([
@@ -309,6 +313,7 @@ function addTermsAndConditions(doc) {
   bullets([
     "AC electrical work is not included.",
     "Wall texture and rustic finishes will be charged extra.",
+    "Deco / PU / Polish finishes will be charged extra.",
     "Decorative items such as curtains, fans, mattresses, hanging lights, etc. are not included.",
     "Any work or materials not specifically mentioned above will be charged separately upon mutual agreement.",
   ]);
