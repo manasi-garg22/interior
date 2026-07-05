@@ -195,8 +195,132 @@ function exportPdf() {
     },
   });
 
+  // ----- Terms, specifications and conditions -----
+  addTermsAndConditions(doc);
+
   const safeName = clientName.replace(/[^a-z0-9]+/gi, "_").toLowerCase();
   doc.save(`${safeName || "interior_estimate"}.pdf`);
+}
+
+// Appends payment terms, specifications, exclusions and T&C to the PDF.
+function addTermsAndConditions(doc) {
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const marginX = 14;
+  const marginBottom = 18;
+  const maxWidth = pageWidth - marginX * 2;
+
+  let y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 50;
+
+  const ensureSpace = (needed) => {
+    if (y + needed > pageHeight - marginBottom) {
+      doc.addPage();
+      y = 20;
+    }
+  };
+
+  const sectionHeading = (text) => {
+    ensureSpace(14);
+    doc.setFontSize(13);
+    doc.setTextColor(15, 76, 129);
+    doc.setFont(undefined, "bold");
+    doc.text(text, marginX, y);
+    y += 3;
+    doc.setDrawColor(15, 76, 129);
+    doc.setLineWidth(0.4);
+    doc.line(marginX, y, pageWidth - marginX, y);
+    y += 6;
+  };
+
+  const subHeading = (text) => {
+    ensureSpace(9);
+    doc.setFontSize(11);
+    doc.setTextColor(40, 40, 40);
+    doc.setFont(undefined, "bold");
+    doc.text(text, marginX, y);
+    y += 6;
+  };
+
+  const bullets = (lines) => {
+    doc.setFontSize(10);
+    doc.setTextColor(60, 60, 60);
+    doc.setFont(undefined, "normal");
+    lines.forEach((line) => {
+      const wrapped = doc.splitTextToSize(line, maxWidth - 6);
+      ensureSpace(wrapped.length * 5 + 1);
+      doc.text("\u2022", marginX, y);
+      doc.text(wrapped, marginX + 5, y);
+      y += wrapped.length * 5 + 1.5;
+    });
+    y += 3;
+  };
+
+  // Payment Terms (as a small table)
+  sectionHeading("Payment Terms");
+  doc.autoTable({
+    startY: y,
+    margin: { left: marginX, right: marginX },
+    head: [["Stage", "Percentage"]],
+    body: [
+      ["Advance Payment", "10%"],
+      ["Material Procurement", "30%"],
+      ["Structure Completion", "20%"],
+      ["Laminate Work", "20%"],
+      ["Handle & Lock Installation", "15%"],
+      ["Final Finishing & Handover", "5%"],
+    ],
+    theme: "grid",
+    headStyles: { fillColor: [15, 76, 129] },
+    columnStyles: { 1: { halign: "right", cellWidth: 40 } },
+    styles: { fontSize: 10 },
+  });
+  y = doc.lastAutoTable.finalY + 12;
+
+  // Furniture Specifications
+  sectionHeading("Furniture Specifications");
+  subHeading("Kitchen");
+  bullets([
+    "Waterproof Plywood (710 Grade) - Rs. 80-85 Range",
+    "Tandem Basket - Eigos / Godrej",
+  ]);
+  subHeading("Other Furniture");
+  bullets([
+    "MR Plywood 303 - Rs. 60-65 Range",
+    "Inner Liner (Off White) - Rs. 450 Range",
+    "Laminate - Rs. 1800 Range",
+    "Acrylic Finish (Kitchen Only) - Rs. 3500 Range",
+    "Cupboard Configuration: 1 Cupboard + 4 Drawers",
+    "Additional Drawer - Rs. 2000 per Drawer",
+    "Handles - Rs. 200-250 Range",
+    "Sofa Fabric - Rs. 450 Range",
+    "Sofa Material - Refresh Prime",
+    "Soft Close Hinges - Rs. 90 per Set",
+    "Door Lock (Jali Door) - Rs. 1500 Range",
+  ]);
+  subHeading("Electrical Accessories");
+  bullets([
+    "Wiring: Anchor / RR",
+    "Lights: Panasonic (Approx. Rs. 400 Range)",
+    "Switches: Anchor / Fybros",
+  ]);
+
+  // Exclusions
+  sectionHeading("Exclusions");
+  bullets([
+    "AC electrical work is not included.",
+    "Wall texture and rustic finishes will be charged extra.",
+    "Decorative items such as curtains, fans, mattresses, hanging lights, etc. are not included.",
+    "Any work or materials not specifically mentioned above will be charged separately upon mutual agreement.",
+  ]);
+
+  // Terms & Conditions
+  sectionHeading("Terms & Conditions");
+  bullets([
+    "All dimensions are approximate and subject to site requirements.",
+    "Final measurements and billing will be completed after project completion.",
+    "Electricity points required for use during execution shall be provided by the client at no additional cost.",
+    "The contractor shall not be responsible for delays caused by payment issues or unavoidable circumstances.",
+  ]);
 }
 
 // jsPDF's default font doesn't render the rupee glyph reliably, so use "Rs."
