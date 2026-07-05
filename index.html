@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interior Cost Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="header">
+      <h1>Interior Cost Calculator</h1>
+      <p class="subtitle">Add rooms / items, enter quantity &amp; price, then export to PDF.</p>
+    </header>
+
+    <section class="client-info">
+      <div class="field">
+        <label for="clientName">Client / Project Name</label>
+        <input type="text" id="clientName" placeholder="e.g. Sharma Residence" />
+      </div>
+      <div class="field">
+        <label for="quoteDate">Date</label>
+        <input type="date" id="quoteDate" />
+      </div>
+    </section>
+
+    <section class="entry">
+      <h2>Add Item</h2>
+      <form id="itemForm" class="entry-form">
+        <div class="field">
+          <label for="roomType">Room Type</label>
+          <input type="text" id="roomType" list="roomTypeList" placeholder="Pick or type" autocomplete="off" required />
+          <datalist id="roomTypeList">
+            <option value="Kitchen"></option>
+            <option value="Living Room"></option>
+            <option value="Master Bedroom"></option>
+            <option value="Bedroom"></option>
+            <option value="Bathroom"></option>
+            <option value="Dining Room"></option>
+            <option value="Balcony"></option>
+            <option value="Study Room"></option>
+            <option value="Pooja Room"></option>
+          </datalist>
+        </div>
+        <div class="field">
+          <label for="roomName">Item</label>
+          <input type="text" id="roomName" placeholder="e.g. Modular Cabinet" required />
+        </div>
+        <div class="field">
+          <label for="quantity">Quantity</label>
+          <input type="number" id="quantity" min="0" step="any" value="1" required />
+        </div>
+        <div class="field">
+          <label for="unit">Units</label>
+          <input type="text" id="unit" list="unitList" value="Nos" placeholder="Pick or type" autocomplete="off" required />
+          <datalist id="unitList">
+            <option value="Nos"></option>
+            <option value="Sq.ft"></option>
+            <option value="Sq.m"></option>
+            <option value="Rft"></option>
+            <option value="Set"></option>
+            <option value="Lump Sum"></option>
+          </datalist>
+        </div>
+        <div class="field">
+          <label for="price">Unit Price (&#8377;)</label>
+          <input type="number" id="price" min="0" step="0.01" placeholder="0.00" required />
+        </div>
+        <button type="submit" class="btn btn-add">Add Item</button>
+      </form>
+    </section>
+
+    <section class="table-section">
+      <table id="itemsTable">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Room Type</th>
+            <th>Item</th>
+            <th class="num">Quantity</th>
+            <th>Units</th>
+            <th class="num">Unit Price (&#8377;)</th>
+            <th class="num">Total (&#8377;)</th>
+            <th class="action-col">Action</th>
+          </tr>
+        </thead>
+        <tbody id="itemsBody">
+          <!-- rows injected here -->
+        </tbody>
+        <tfoot>
+          <tr>
+            <td colspan="6" class="grand-label">Grand Total</td>
+            <td class="num grand-total" id="grandTotal">&#8377;0.00</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+      <p id="emptyMsg" class="empty-msg">No items added yet.</p>
+    </section>
+
+    <section class="actions">
+      <button type="button" class="btn btn-pdf" id="exportPdf">Export as PDF</button>
+      <button type="button" class="btn btn-clear" id="clearAll">Clear All</button>
+    </section>
+  </div>
+
+  <!-- jsPDF for PDF generation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
+    integrity="sha512-qZvrmS2ekKPF2mSznTQsxqPgnpkI4DNTlrdUmTzrDgektczlKNRRhy5X5AAOnx5S09ydFYWWNSfcEqDTTHgtNA=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"
+    integrity="sha512-2/YdOMV+YNpanLCF5MdQwaoFRVbTmrJ4u4EpqS/USXAQNUDgI5uwYi6J98WVtJKcfe1AbgerygzDFToxAlOGEQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="app.js"></script>
+</body>
+</html>
