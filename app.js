@@ -116,17 +116,45 @@ function exportPdf() {
       })
     : "";
 
-  // Title
-  doc.setFontSize(18);
+  // Brand header
+  const pageWidth = doc.internal.pageSize.getWidth();
+
+  // Brand mark
+  doc.setFillColor(15, 76, 129);
+  doc.roundedRect(14, 12, 12, 12, 2, 2, "F");
+  doc.setFontSize(9);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont(undefined, "bold");
+  doc.text("OM", 20, 19.5, { align: "center" });
+
+  // Brand name + tagline
+  doc.setFontSize(20);
   doc.setTextColor(15, 76, 129);
-  doc.text("Interior Cost Estimate", 14, 20);
+  doc.setFont(undefined, "bold");
+  doc.text("OM Arch Designs", 29, 18);
+  doc.setFontSize(8.5);
+  doc.setTextColor(120, 120, 120);
+  doc.setFont(undefined, "normal");
+  doc.text("ARCHITECTURE & INTERIOR SOLUTIONS", 29, 23);
+
+  // Divider line
+  doc.setDrawColor(15, 76, 129);
+  doc.setLineWidth(0.5);
+  doc.line(14, 27, pageWidth - 14, 27);
+
+  // Document title (smaller)
+  doc.setFontSize(12);
+  doc.setTextColor(55, 65, 81);
+  doc.setFont(undefined, "bold");
+  doc.text("Interior Cost Estimate", 14, 35);
+  doc.setFont(undefined, "normal");
 
   // Client info
   doc.setFontSize(11);
   doc.setTextColor(60, 60, 60);
-  doc.text(`Client / Project: ${clientName}`, 14, 30);
+  doc.text(`Client / Project: ${clientName}`, 14, 43);
   if (dateStr) {
-    doc.text(`Date: ${dateStr}`, 14, 37);
+    doc.text(`Date: ${dateStr}`, 14, 50);
   }
 
   // Table - grouped by room type with subtotals
@@ -180,7 +208,7 @@ function exportPdf() {
   });
 
   doc.autoTable({
-    startY: dateStr ? 44 : 37,
+    startY: dateStr ? 57 : 50,
     head: [["#", "Item", "Qty", "Units", "Unit Price", "Total"]],
     body: body,
     foot: [["", "", "", "", "Grand Total", formatPdfCurrency(grandTotal)]],

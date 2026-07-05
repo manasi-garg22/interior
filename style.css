@@ -22,9 +22,57 @@ body {
   padding: 28px;
 }
 
-.header h1 {
-  font-size: 1.7rem;
+.header {
+  border-bottom: 2px solid #e5e7eb;
+  padding-bottom: 16px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #0f4c81, #1e6fb8);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.15rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 3px 8px rgba(15, 76, 129, 0.25);
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.2;
+}
+
+.brand-name {
+  font-size: 1.35rem;
+  font-weight: 800;
   color: #0f4c81;
+  letter-spacing: 0.01em;
+}
+
+.brand-tag {
+  font-size: 0.78rem;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.page-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #374151;
+  margin-top: 14px;
 }
 
 .subtitle {
@@ -210,8 +258,11 @@ tfoot td {
     padding: 18px 14px;
     border-radius: 10px;
   }
-  .header h1 {
-    font-size: 1.4rem;
+  .brand-name {
+    font-size: 1.15rem;
+  }
+  .page-title {
+    font-size: 0.98rem;
   }
   .entry-form {
     grid-template-columns: 1fr 1fr;
