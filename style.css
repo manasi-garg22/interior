@@ -102,6 +102,10 @@ h2 {
   min-width: 200px;
 }
 
+.remarks-field {
+  flex-basis: 100%;
+}
+
 .field {
   display: flex;
   flex-direction: column;
@@ -115,6 +119,7 @@ label {
 }
 
 input,
+textarea,
 select {
   width: 100%;
   padding: 9px 11px;
@@ -127,9 +132,16 @@ select {
 }
 
 input:focus,
+textarea:focus,
 select:focus {
   border-color: #0f4c81;
   box-shadow: 0 0 0 3px rgba(15, 76, 129, 0.12);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 88px;
+  font-family: inherit;
 }
 
 .entry-form {

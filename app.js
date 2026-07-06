@@ -13,6 +13,7 @@ const itemsBody = document.getElementById("itemsBody");
 const grandTotalEl = document.getElementById("grandTotal");
 const emptyMsg = document.getElementById("emptyMsg");
 const dateInput = document.getElementById("quoteDate");
+const remarksInput = document.getElementById("remarks");
 
 // Default the date field to today.
 dateInput.valueAsDate = new Date();
@@ -115,6 +116,7 @@ function exportPdf() {
         year: "numeric",
       })
     : "";
+  const remarks = remarksInput.value.trim();
 
   // Brand header
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -155,6 +157,20 @@ function exportPdf() {
   doc.text(`Client / Project: ${clientName}`, 14, 43);
   if (dateStr) {
     doc.text(`Date: ${dateStr}`, 14, 50);
+  }
+
+  let tableStartY = dateStr ? 57 : 50;
+
+  if (remarks) {
+    const remarksTopY = tableStartY;
+    const remarksLines = doc.splitTextToSize(remarks, pageWidth - 42);
+
+    doc.setFont(undefined, "bold");
+    doc.text("Remarks:", 14, remarksTopY);
+    doc.setFont(undefined, "normal");
+    doc.text(remarksLines, 34, remarksTopY);
+
+    tableStartY = remarksTopY + remarksLines.length * 6 + 6;
   }
 
   // Table - grouped by room type with subtotals
@@ -208,7 +224,7 @@ function exportPdf() {
   });
 
   doc.autoTable({
-    startY: dateStr ? 57 : 50,
+    startY: tableStartY,
     head: [["#", "Item", "Qty", "Units", "Unit Price", "Total"]],
     body: body,
     foot: [["", "", "", "", "Grand Total", formatPdfCurrency(grandTotal)]],
