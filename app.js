@@ -159,19 +159,7 @@ function exportPdf() {
     doc.text(`Date: ${dateStr}`, 14, 50);
   }
 
-  let tableStartY = dateStr ? 57 : 50;
-
-  if (remarks) {
-    const remarksTopY = tableStartY;
-    const remarksLines = doc.splitTextToSize(remarks, pageWidth - 42);
-
-    doc.setFont(undefined, "bold");
-    doc.text("Remarks:", 14, remarksTopY);
-    doc.setFont(undefined, "normal");
-    doc.text(remarksLines, 34, remarksTopY);
-
-    tableStartY = remarksTopY + remarksLines.length * 6 + 6;
-  }
+  const tableStartY = dateStr ? 57 : 50;
 
   // Table - grouped by room type with subtotals
   let grandTotal = 0;
@@ -239,11 +227,40 @@ function exportPdf() {
     },
   });
 
+  addRemarksSection(doc, remarks);
+
   // ----- Terms, specifications and conditions -----
   addTermsAndConditions(doc);
 
   const safeName = clientName.replace(/[^a-z0-9]+/gi, "_").toLowerCase();
   doc.save(`${safeName || "interior_estimate"}.pdf`);
+}
+
+function addRemarksSection(doc, remarks) {
+  if (!remarks) {
+    return;
+  }
+
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const marginX = 14;
+  const marginBottom = 18;
+  const lineHeight = 6;
+  const remarksLines = doc.splitTextToSize(remarks, pageWidth - 42);
+  const neededHeight = Math.max(16, remarksLines.length * lineHeight + 8);
+
+  let y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 50;
+  if (y + neededHeight > pageHeight - marginBottom) {
+    doc.addPage();
+    y = 20;
+  }
+
+  doc.setFontSize(11);
+  doc.setTextColor(60, 60, 60);
+  doc.setFont(undefined, "bold");
+  doc.text("Remarks:", marginX, y);
+  doc.setFont(undefined, "normal");
+  doc.text(remarksLines, marginX + 20, y);
 }
 
 // Appends payment terms, specifications, exclusions and T&C to the PDF.
