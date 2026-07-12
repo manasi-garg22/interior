@@ -227,10 +227,10 @@ function exportPdf() {
     },
   });
 
-  addRemarksSection(doc, remarks);
+  const nextSectionY = addRemarksSection(doc, remarks);
 
   // ----- Terms, specifications and conditions -----
-  addTermsAndConditions(doc);
+  addTermsAndConditions(doc, nextSectionY);
 
   const safeName = clientName.replace(/[^a-z0-9]+/gi, "_").toLowerCase();
   doc.save(`${safeName || "interior_estimate"}.pdf`);
@@ -238,7 +238,7 @@ function exportPdf() {
 
 function addRemarksSection(doc, remarks) {
   if (!remarks) {
-    return;
+    return doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 50;
   }
 
   const pageWidth = doc.internal.pageSize.getWidth();
@@ -246,8 +246,9 @@ function addRemarksSection(doc, remarks) {
   const marginX = 14;
   const marginBottom = 18;
   const lineHeight = 6;
-  const remarksLines = doc.splitTextToSize(remarks, pageWidth - 42);
-  const neededHeight = Math.max(16, remarksLines.length * lineHeight + 8);
+  const maxWidth = pageWidth - marginX * 2;
+  const remarksLines = doc.splitTextToSize(remarks, maxWidth);
+  const neededHeight = Math.max(20, remarksLines.length * lineHeight + 14);
 
   let y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 50;
   if (y + neededHeight > pageHeight - marginBottom) {
@@ -259,19 +260,22 @@ function addRemarksSection(doc, remarks) {
   doc.setTextColor(60, 60, 60);
   doc.setFont(undefined, "bold");
   doc.text("Remarks:", marginX, y);
+  y += 7;
   doc.setFont(undefined, "normal");
-  doc.text(remarksLines, marginX + 20, y);
+  doc.text(remarksLines, marginX, y);
+
+  return y + remarksLines.length * lineHeight + 6;
 }
 
 // Appends payment terms, specifications, exclusions and T&C to the PDF.
-function addTermsAndConditions(doc) {
+function addTermsAndConditions(doc, startY) {
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const marginX = 14;
   const marginBottom = 18;
   const maxWidth = pageWidth - marginX * 2;
 
-  let y = doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 50;
+  let y = startY || (doc.lastAutoTable ? doc.lastAutoTable.finalY + 12 : 50);
 
   const ensureSpace = (needed) => {
     if (y + needed > pageHeight - marginBottom) {

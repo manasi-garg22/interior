@@ -92,18 +92,21 @@ h2 {
 }
 
 .client-info {
-  display: flex;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
-  flex-wrap: wrap;
 }
 
 .client-info .field {
-  flex: 1;
   min-width: 200px;
 }
 
 .remarks-field {
-  flex-basis: 100%;
+  grid-column: 1 / -1;
+}
+
+.remarks-field textarea {
+  min-height: 140px;
 }
 
 .field {
@@ -295,6 +298,6 @@ tfoot td {
     grid-template-columns: 1fr;
   }
   .client-info {
-    flex-direction: column;
+    grid-template-columns: 1fr;
   }
 }
